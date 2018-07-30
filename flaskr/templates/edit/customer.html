@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>IT703-A1</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='edit_style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<nav>
+  <h1>IT703-A1</h1>
+  <ul>
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+  </ul>
+</nav>
+<body>
+    <div class="mainBox">
+        <div class="leftBox">
+            <div class="menuItem customers">
+                <a href="{{ url_for('edit.show_customer') }}">Customers</a>
+            </div>
+            <div class="menuItem contacts">
+                <a href="{{ url_for('edit.show_contact') }}">Contacts</a>
+            </div>
+        </div>
+        <div class="rightBox">
+            <label for="search">Search</label>
+            <input name="username" id="username" required>
+        </div>
+    </div>
+</body>
+</html>
