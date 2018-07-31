@@ -35,6 +35,4 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     app.register_blueprint(editor.bp)
 
-    # make url_for('/') == url_for('/edit/customer')
-    # app.add_url_rule('/', endpoint='/edit/customer')
     return app
