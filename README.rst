@@ -1,10 +1,5 @@
-Flaskr
-======
-
-The basic blog app built in the Flask `tutorial`_.
-
-.. _tutorial: http://flask.pocoo.org/docs/tutorial/
-
+IT703 DataBase A1
+=================
 
 Install
 -------
@@ -60,18 +55,3 @@ Or on Windows cmd::
     flask run
 
 Open http://127.0.0.1:5000 in a browser.
-
-
-Test
-----
-
-::
-
-    pip install '.[test]'
-    pytest
-
-Run with coverage report::
-
-    coverage run -m pytest
-    coverage report
-    coverage html  # open htmlcov/index.html in a browser
