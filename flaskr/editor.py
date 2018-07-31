@@ -7,7 +7,7 @@ from flaskr.auth import login_required
 bp = Blueprint('edit', __name__)
 
 
-@bp.route('/edit/customer')
+@bp.route('/')
 @login_required
 def show_customer():
     return render_template('edit/customer.html')

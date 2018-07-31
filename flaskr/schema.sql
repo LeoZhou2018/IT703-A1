@@ -1,20 +1,49 @@
--- Initialize the database.
--- Drop any existing data and create empty tables.
-
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS customer;
+DROP TABLE IF EXISTS contact;
+DROP TABLE IF EXISTS title;
 
 CREATE TABLE user (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  User_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  User_Name TEXT UNIQUE NOT NULL,
+  Password TEXT NOT NULL
 );
 
-CREATE TABLE post (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  author_id INTEGER NOT NULL,
-  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  title TEXT NOT NULL,
-  body TEXT NOT NULL,
-  FOREIGN KEY (author_id) REFERENCES user (id)
+CREATE TABLE customer (
+  Company_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  Company_Name TEXT UNIQUE NOT NULL,
+  Location_Country TEXT,
+  Location_City TEXT,
+  Location_Street TEXT,
+  Location_Post_Code INTEGER,
+  Postal_Country TEXT,
+  Postal_City TEXT,
+  Postal_Street TEXT,
+  Postal_Post_Code INTEGER,
+  State INTEGER DEFAULT 1
+);
+
+CREATE TABLE title (
+  Title_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  Title_Name TEXT UNIQUE NOT NULL
+);
+
+CREATE TABLE contact (
+  Contact_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+  Title_ID INTEGER,
+  Contact_Name TEXT UNIQUE NOT NULL,
+  Company_ID INTEGER,
+  Role TEXT,
+  Location_Country TEXT,
+  Location_City TEXT,
+  Location_Street TEXT,
+  Location_Post_Code INTEGER,
+  Email TEXT,
+  Phone_Work INTEGER,
+  Phone_Cell INTEGER,
+  Phone_Home INTEGER,
+  Notes TEXT,
+  State INTEGER DEFAULT 1,
+  FOREIGN KEY (Title_ID) REFERENCES title (Title_ID),
+  FOREIGN KEY (Company_ID) REFERENCES customer (Company_ID)
 );

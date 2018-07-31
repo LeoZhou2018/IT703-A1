@@ -9,7 +9,7 @@ from flaskr.db import get_db
 bp = Blueprint('blog', __name__)
 
 
-@bp.route('/')
+@bp.route('/blog')
 def index():
     """Show all the posts, most recent first."""
     db = get_db()
