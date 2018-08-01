@@ -24,8 +24,37 @@
             </div>
         </div>
         <div class="rightBox">
-            <label for="search">Search</label>
-            <input name="username" id="username" required>
+            <form  action="{{ url_for('edit.search') }}" method="post">
+                <div>
+                    <label for="search_name">Search</label>
+                    <input name="search_name" id="search_name" required  placeholder="Search for company...">
+                    <input type="submit" value="Search">
+                </div>
+            </form>
+            <form method="post">
+                <input type="hidden" name="company_id" value="">
+                <div>
+                    <label for="company">Company Name</label>
+                    <input name="company" id="company" required>
+                </div>
+                <div class="location">
+                    <label>Location Address</label>
+                    <input name="location_country" id="location_country" placeholder="country">
+                    <input name="location_city" id="location_city" placeholder="city">
+                    <input name="location_street" id="location_street" placeholder="street">
+                    <input name="location_post_code" id="location_post_code" placeholder="post code">
+                </div>
+                <div class="postal">
+                    <label>Postal Address</label>
+                    <input name="postal_country" id="postal_country" placeholder="country">
+                    <input name="postal_city" id="postal_city" placeholder="city">
+                    <input name="postal_street" id="postal_street" placeholder="street">
+                    <input name="postal_post_code" id="postal_post_code" placeholder="post code">
+                </div>
+                <div class="contacts">
+                    <label>Contacts:</label>
+                </div>
+            </form>
         </div>
     </div>
 </body>
