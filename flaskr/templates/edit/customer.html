@@ -33,7 +33,7 @@
                 </ul>
               {% endif %}
             {% endwith %}
-            <form  action="{{ url_for('edit.search') }}" method="post">
+            <form action="{{ url_for('edit.search') }}" method="post">
                 <div>
                     <button class="gb_7e gb_hf" aria-label="Search Google Drive" role="button">
                         <svg focusable="false" height="24px" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
@@ -98,71 +98,38 @@
                     <input type="submit" name="action" value="Add Contact">
                 </div>
             </form>
-
-             <div class="contacts_list">
-                 <table class="fixed_header">
-                  <thead>
-                    <tr>
-                      <th>Col 1</th>
-                      <th>Col 2</th>
-                      <th>Col 3</th>
-                      <th>Col 4</th>
-                      <th>Col 5</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>row 1-0</td>
-                      <td>row 1-1</td>
-                      <td>row 1-2</td>
-                      <td>row 1-3</td>
-                      <td>row 1-4</td>
-                    </tr>
-                    <tr>
-                      <td>row 2-0</td>
-                      <td>row 2-1</td>
-                      <td>row 2-2</td>
-                      <td>row 2-3</td>
-                      <td>row 2-4</td>
-                    </tr>
-                    <tr>
-                      <td>row 3-0</td>
-                      <td>row 3-1</td>
-                      <td>row 3-2</td>
-                      <td>row 3-3</td>
-                      <td>row 3-4</td>
-                    </tr>
-                    <tr>
-                      <td>row 4-0</td>
-                      <td>row 4-1</td>
-                      <td>row 4-2</td>
-                      <td>row 4-3</td>
-                      <td>row 4-4</td>
-                    </tr>
-                    <tr>
-                      <td>row 5-0</td>
-                      <td>row 5-1</td>
-                      <td>row 5-2</td>
-                      <td>row 5-3</td>
-                      <td>row 5-4</td>
-                    </tr>
-                    <tr>
-                      <td>row 6-0</td>
-                      <td>row 6-1</td>
-                      <td>row 6-2</td>
-                      <td>row 6-3</td>
-                      <td>row 6-4</td>
-                    </tr>
-                    <tr>
-                      <td>row 7-0</td>
-                      <td>row 7-1</td>
-                      <td>row 7-2</td>
-                      <td>row 7-3</td>
-                      <td>row 7-4</td>
-                    </tr>
-                  </tbody>
-                </table>
-            </div>
+            {% if contacts %}
+                <div class="contacts_list">
+                    <table class="fixed_header">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Phone_Work</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for contact in contacts %}
+                                <a class="action" href="{{ url_for('edit.show_contact', company=company, contact=contact) }}">
+                                    <tr>
+                                        <td>{ contact['Title_ID'] }}</td>
+                                        <td>{ contact['Contact_Name'] }}</td>
+                                        <td>{ contact['Role'] }}</td>
+                                        <td>{ contact['Phone_Work'] }}</td>
+                                        <td>{ contact['Email'] }}</td>
+                                    </tr>
+                                </a>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div>
+                    <label>The current company does not have any contact information</label>
+                </div>
+            {% endif %}
         </div>
     </div>
 </body>

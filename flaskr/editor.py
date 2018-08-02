@@ -274,3 +274,10 @@ def get_contacts_by_company_id(company_id):
             'SELECT * FROM contact WHERE Company_ID = ? AND State = ?', (company_id, 1)
         ).fetchall()
     return contacts
+
+
+@bp.route('/edit/edit_contact', methods=('GET', 'POST'))
+@login_required
+def edit_contact():
+    """edit contact information."""
+    return render_template('edit/contact.html')
