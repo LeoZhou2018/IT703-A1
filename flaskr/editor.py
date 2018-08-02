@@ -26,41 +26,27 @@ def edit_company():
     """edit company information."""
     error = None
     if request.method == 'POST':
-        action = request.form['action']
+        form = request.form
+        action = form['action']
         if not action:
             flash('Action type is required.')
         else:
             if action == 'Save':
-                '''Add new company'''
-                error = add_company(request.form['company'],
-                                    request.form['location_country'],
-                                    request.form['location_city'],
-                                    request.form['location_street'],
-                                    request.form['location_post_code'],
-                                    request.form['postal_country'],
-                                    request.form['postal_city'],
-                                    request.form['postal_street'],
-                                    request.form['postal_post_code'],
-                                    )
+                error = add_company(form['company'],
+                                    form['location_country'], form['location_city'],
+                                    form['location_street'], form['location_post_code'],
+                                    form['postal_country'], form['postal_city'],
+                                    form['postal_street'], form['postal_post_code'])
             elif action == 'Update':
-                '''Update company information'''
-                error = update_company(request.form['company_id'],
-                                       request.form['company'],
-                                       request.form['location_country'],
-                                       request.form['location_city'],
-                                       request.form['location_street'],
-                                       request.form['location_post_code'],
-                                       request.form['postal_country'],
-                                       request.form['postal_city'],
-                                       request.form['postal_street'],
-                                       request.form['postal_post_code'],
-                                       )
+                error = update_company(form['company_id'], form['company'],
+                                       form['location_country'], form['location_city'],
+                                       form['location_street'], form['location_post_code'],
+                                       form['postal_country'], form['postal_city'],
+                                       form['postal_street'], form['postal_post_code'])
             elif action == 'Remove':
-                '''Remove company'''
-                error = remove_company(request.form['company_id'])
+                error = remove_company(form['company_id'])
             elif action == 'Add Contact':
-                '''Add contact to company'''
-                company_id = request.form['company_id']
+                company_id = form['company_id']
                 if not company_id:
                     error = 'Please search the company name you want to add contact first.'
                 else:
@@ -71,25 +57,17 @@ def edit_company():
                     if len(company) == 0:
                         error = "The company you want to add contact doesn't exists."
                     else:
-                        return render_template('edit/contact.html',
-                                               company_id=company_id,
+                        return render_template('edit/contact.html', company_id=company_id,
                                                company_name=company[0]['Company_Name'])
             else:
-                '''Unsupported operation'''
                 error = "Unsupported operation: {0}".format(action)
     flash(error)
     return render_template('edit/customer.html')
 
 
 def add_company(company_name,
-                location_country,
-                location_city,
-                location_street,
-                location_post_code,
-                postal_country,
-                postal_city,
-                postal_street,
-                postal_post_code
+                location_country, location_city, location_street, location_post_code,
+                postal_country, postal_city, postal_street, postal_post_code
                 ):
     if not company_name:
         error = 'Please enter the company name you want to save.'
@@ -103,25 +81,12 @@ def add_company(company_name,
             db.execute(
                 'INSERT INTO customer ('
                 'Company_Name, '
-                'Location_Country, '
-                'Location_City,'
-                'Location_Street, '
-                'Location_Post_Code, '
-                'Postal_Country, '
-                'Postal_City, '
-                'Postal_Street, '
-                'Postal_Post_Code)'
+                'Location_Country, Location_City, Location_Street, Location_Post_Code, '
+                'Postal_Country, Postal_City, Postal_Street, Postal_Post_Code)'
                 ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 (company_name,
-                 location_country,
-                 location_city,
-                 location_street,
-                 location_post_code,
-                 postal_country,
-                 postal_city,
-                 postal_street,
-                 postal_post_code)
-            )
+                 location_country, location_city, location_street, location_post_code,
+                 postal_country, postal_city, postal_street, postal_post_code))
             db.commit()
             error = "Add company {0} completed.".format(company_name)
         else:
@@ -131,15 +96,8 @@ def add_company(company_name,
             else:
                 execute_update(cur_company['Company_ID'],
                                company_name,
-                               location_country,
-                               location_city,
-                               location_street,
-                               location_post_code,
-                               postal_country,
-                               postal_city,
-                               postal_street,
-                               postal_post_code
-                               )
+                               location_country, location_city, location_street, location_post_code,
+                               postal_country, postal_city, postal_street, postal_post_code)
                 error = "Add company {0} completed.".format(company_name)
     return error
 
@@ -165,16 +123,9 @@ def remove_company(company_id):
     return error
 
 
-def update_company(company_id,
-                   company_name,
-                   location_country,
-                   location_city,
-                   location_street,
-                   location_post_code,
-                   postal_country,
-                   postal_city,
-                   postal_street,
-                   postal_post_code):
+def update_company(company_id, company_name,
+                   location_country, location_city, location_street, location_post_code,
+                   postal_country, postal_city, postal_street, postal_post_code):
     if not company_id:
         error = 'Please search the company name you want to update first.'
     else:
@@ -188,56 +139,29 @@ def update_company(company_id,
             if not company_name:
                 error = "Please enter the company name you want to update."
             else:
-                execute_update(company_id,
-                               company_name,
-                               location_country,
-                               location_city,
-                               location_street,
-                               location_post_code,
-                               postal_country,
-                               postal_city,
-                               postal_street,
-                               postal_post_code)
+                execute_update(company_id, company_name,
+                               location_country, location_city, location_street, location_post_code,
+                               postal_country, postal_city, postal_street, postal_post_code)
                 error = "Update company {0} completed.".format(request.form['company'])
     return error
 
 
-def execute_update(company_id,
-                   company_name,
-                   location_country,
-                   location_city,
-                   location_street,
-                   location_post_code,
-                   postal_country,
-                   postal_city,
-                   postal_street,
-                   postal_post_code):
+def execute_update(company_id, company_name,
+                   location_country, location_city, location_street, location_post_code,
+                   postal_country, postal_city, postal_street, postal_post_code):
 
     db = get_db()
     db.execute(
         'UPDATE customer SET '
         'Company_Name = ?,'
-        'Location_Country = ?,'
-        'Location_City = ?,'
-        'Location_Street = ?,'
-        'Location_Post_Code = ?,'
-        'Postal_Country = ?,'
-        'Postal_City = ?,'
-        'Postal_Street = ?,'
-        'Postal_Post_Code = ?,'
+        'Location_Country = ?, Location_City = ?, Location_Street = ?, Location_Post_Code = ?,'
+        'Postal_Country = ?, Postal_City = ?, Postal_Street = ?, Postal_Post_Code = ?,'
         'State = ?'
         'WHERE Company_ID = ?',
         (company_name,
-         location_country,
-         location_city,
-         location_street,
-         location_post_code,
-         postal_country,
-         postal_city,
-         postal_street,
-         postal_post_code,
-         1,
-         company_id)
+         location_country, location_city, location_street, location_post_code,
+         postal_country, postal_city, postal_street, postal_post_code,
+         1, company_id)
     )
     db.commit()
 

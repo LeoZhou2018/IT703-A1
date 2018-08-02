@@ -127,5 +127,6 @@ a{
 input#notes
 {
     width:100%;
+    text-align: left;
     height:200px;
 }
