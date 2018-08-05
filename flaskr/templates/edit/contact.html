@@ -2,6 +2,20 @@
 {% block rightBoxContent %}
     <div>
         <form action="{{ url_for('edit.edit_contact') }}" method="post">
+            <label for="search_name">Search</label>
+            <input name="search_name" id="search_name" list="contact_names" autocomplete="off" required  placeholder="Search for contact...">
+            {% if contact_names %}
+                 <datalist id="contact_names">
+                 {% for contact_name in contact_names %}
+                    <option>{{ contact_name["Contact_Name"] }}</option>
+                 {% endfor %}
+                </datalist>
+            {% endif %}
+            <input type="submit" name="action" value="Search">
+        </form>
+    </div>
+    <div>
+        <form action="{{ url_for('edit.edit_contact') }}" method="post">
             <input type="submit" name="action" value="New">
         </form>
     </div>
@@ -24,7 +38,14 @@
                 {% if contact['Contact_ID'] %}
                     <input type="hidden" name="contact_id" value="{{ contact['Contact_ID'] }}">
                 {% endif %}
-                <input name="contact_name" id="contact_name" value="{{ contact['Contact_Name'] }}" required>
+                <input name="contact_name" list="contact_names" autocomplete="off" id="contact_name" value="{{ contact['Contact_Name'] }}" required>
+                {% if contact_names %}
+                     <datalist id="contact_names">
+                     {% for contact_name in contact_names %}
+                        <option>{{ contact_name["Contact_Name"] }}</option>
+                     {% endfor %}
+                    </datalist>
+                {% endif %}
                 <label for="company">Company:</label>
                 {% if company %}
                     <input name="company" id="company" value="{{ company['Company_Name'] }}">
@@ -35,7 +56,7 @@
             <div>
                 <label for="role">Role:</label>
                 <input name="role" id="role" value="{{ contact['Role'] }}">
-                <label for="location">Location:</label>
+                <label>Location:</label>
                 <input name="location_country" id="location_country" value="{{ contact['Location_Country'] }}">
                 <input name="location_city" id="location_city" value="{{ contact['Location_City'] }}">
                 <input name="location_street" id="location_street" value="{{ contact['Location_Street'] }}">
@@ -72,7 +93,14 @@
         {% else %}
             <div>
                 <label for="contact_name">Name:</label>
-                <input name="contact_name" id="contact_name" placeholder="name" required>
+                <input name="contact_name" list="contact_names" autocomplete="off" id="contact_name" placeholder="name" required>
+                {% if contact_names %}
+                     <datalist id="contact_names">
+                     {% for contact_name in contact_names %}
+                        <option>{{ contact_name["Contact_Name"] }}</option>
+                     {% endfor %}
+                    </datalist>
+                {% endif %}
                 <label for="company">Company:</label>
                 {% if company %}
                     <input name="company" id="company" value="{{ company['Company_Name'] }}">

@@ -94,7 +94,8 @@ def execute_show_company(company=None):
         contacts = get_contact_by_key_value("Company_ID", company["Company_ID"], 1, False)
     db = get_db()
     titles = db.execute('SELECT * FROM title').fetchall()
-    return render_template('edit/customer.html', company=company, contacts=contacts, titles=titles)
+    companies = db.execute('SELECT Company_Name FROM customer').fetchall()
+    return render_template('edit/customer.html', company=company, contacts=contacts, titles=titles, companies=companies)
 
 
 @bp.route('/edit/edit_company', methods=('GET', 'POST'))
@@ -153,8 +154,8 @@ def add_company(result, company_name,
     if not company_name:
         result['message'] = 'Please enter the company name you want to save.'
     else:
-        company = get_company_by_key_value("Company_Name", company_name)
-        if company is not None and company["State"] == 1:
+        company = get_company_by_key_value("Company_Name", company_name, 1)
+        if company is not None:
             result['message'] = 'The company you want to save {0} already exists.'.format(company_name)
             new_company = dict()
             new_company["Company_Name"] = company_name
@@ -168,6 +169,7 @@ def add_company(result, company_name,
             new_company["Postal_Post_Code"] = postal_post_code
             result['company'] = new_company
         else:
+            company = get_company_by_key_value("Company_Name", company_name, 0)
             result = execute_add_company(result, company, company_name,
                                          location_country, location_city, location_street, location_post_code,
                                          postal_country, postal_city, postal_street, postal_post_code)
@@ -210,10 +212,15 @@ def update_company(result, company_id, company_name,
             if not company_name:
                 result['message'] = "Please enter the company name you want to update."
             else:
-                result = execute_update_company(result, company_id, company_name,
-                                                location_country, location_city, location_street, location_post_code,
-                                                postal_country, postal_city, postal_street, postal_post_code)
-                result['message'] = "Update company " + company_name + " completed."
+                cur_company = get_company_by_key_value("Company_Name", company_name, 1)
+                if cur_company is not None:
+                    result['message'] = "The company name " + company_name + " you want to update is already used."
+                else:
+                    result = execute_update_company(result, company_id, company_name,
+                                                    location_country, location_city, location_street,
+                                                    location_post_code,
+                                                    postal_country, postal_city, postal_street, postal_post_code)
+                    result['message'] = "Update company " + company_name + " completed."
     return result
 
 
@@ -241,7 +248,8 @@ def get_contact_by_key_value(key, value, state=None, single=True):
 def execute_show_contact(contact=None, company=None):
     db = get_db()
     titles = db.execute('SELECT * FROM title').fetchall()
-    return render_template('edit/contact.html', titles=titles, contact=contact, company=company)
+    contacts = db.execute('SELECT Contact_Name FROM contact').fetchall()
+    return render_template('edit/contact.html', titles=titles, contact=contact, company=company, contact_names=contacts)
 
 
 @bp.route('/edit/edit_contact', methods=('GET', 'POST'))
@@ -253,7 +261,12 @@ def edit_contact():
         message = None
         form = request.form
         action = form['action']
-        if action == 'Edit':
+        if action == 'Search':
+            contact_name = form['search_name']
+            contact = get_contact_by_key_value("Contact_Name", contact_name, 1)
+            if contact is None:
+                message = "The contact {0} you want to search doesn't exists.".format(contact_name)
+        elif action == 'Edit':
             contact_id = form['contact_id']
             if not contact_id:
                 message = "Contact_ID name is required."

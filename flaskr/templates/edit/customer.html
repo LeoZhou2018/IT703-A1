@@ -3,7 +3,14 @@
     <form action="{{ url_for('edit.edit_company') }}" method="post">
         <div>
             <label for="search_name">Search</label>
-            <input name="search_name" id="search_name" required  placeholder="Search for company...">
+            <input name="search_name" id="search_name" list="companies" autocomplete="off" required  placeholder="Search for company...">
+            {% if companies %}
+                 <datalist id="companies">
+                 {% for company in companies %}
+                    <option>{{ company["Company_Name"] }}</option>
+                 {% endfor %}
+                </datalist>
+            {% endif %}
             <input type="submit" name="action" value="Search">
         </div>
     </form>
@@ -14,7 +21,14 @@
             {% endif %}
             <div>
                 <label for="company">Company Name</label>
-                <input name="company" id="company" value="{{ company['Company_Name'] }}" required>
+                <input name="company" id="company" list="companies" autocomplete="off" value="{{ company['Company_Name'] }}" required>
+                {% if companies %}
+                     <datalist id="companies">
+                     {% for company in companies %}
+                        <option>{{ company["Company_Name"] }}</option>
+                     {% endfor %}
+                    </datalist>
+                {% endif %}
                 {% if company['Company_ID'] %}
                     <input type="submit" name="action" value="Update">
                     <input type="submit" name="action" value="Remove">
@@ -46,7 +60,14 @@
         {% else %}
             <div>
                 <label for="company">Company Name</label>
-                <input name="company" id="company" required>
+                <input name="company" id="company" list="companies" autocomplete="off"  required>
+                {% if companies %}
+                     <datalist id="companies">
+                     {% for company in companies %}
+                        <option>{{ company["Company_Name"] }}</option>
+                     {% endfor %}
+                    </datalist>
+                {% endif %}
                 <input type="submit" name="action" value="Save">
             </div>
             <div class="location">
