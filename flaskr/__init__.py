@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import (Flask)
 
 
 def create_app(test_config=None):
@@ -36,5 +36,4 @@ def create_app(test_config=None):
     app.register_blueprint(editor.bp)
 
     app.add_url_rule("/", "index", editor.edit_company)
-
     return app
