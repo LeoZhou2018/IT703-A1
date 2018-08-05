@@ -35,4 +35,6 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
     app.register_blueprint(editor.bp)
 
+    app.add_url_rule("/", "index", editor.edit_company)
+
     return app

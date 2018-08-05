@@ -94,10 +94,9 @@ def login():
             # store the user id in a new session and return to the index
             session.clear()
             session['user_id'] = user['User_ID']
-            return redirect(url_for('edit.show_customer'))
+            return redirect(url_for('edit.edit_company'))
 
         flash(error)
-
     return render_template('auth/login.html')
 
 

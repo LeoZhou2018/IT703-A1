@@ -17,10 +17,10 @@
     <div class="mainBox">
         <div class="leftBox">
             <div class="menuItem customers">
-                <a href="{{ url_for('edit.show_customer') }}">Customers</a>
+                <a href="{{ url_for('edit.edit_company') }}">Customers</a>
             </div>
             <div class="menuItem contacts">
-                <a href="{{ url_for('edit.show_contact') }}">Contacts</a>
+                <a href="{{ url_for('edit.edit_contact') }}">Contacts</a>
             </div>
         </div>
         <div class="rightBox">
@@ -37,8 +37,9 @@
                 <div>
                     <label for="title">Title:</label>
                     <select name="title" id="title">
-                        <option value="0">Mr.</option>
-                        <option value="1">Miss</option>
+                        {% for title in titles %}
+                            <option value="{{ title['Title_ID'] }}">{{ title['Title_Name'] }}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 {% if contact %}
@@ -51,25 +52,28 @@
                         <label for="contact_name">Name:</label>
                         <input name="contact_name" id="contact_name" placeholder="name" required>
                         <label for="company">Company:</label>
-                        <input name="company" id="company" placeholder="company name" required>
+                        <input name="company" id="company" placeholder="company name">
                     </div>
                     <div>
                         <label for="role">Role:</label>
                         <input name="role" id="role" placeholder="role" required>
                         <label for="location">Location:</label>
-                        <input name="location" id="location" placeholder="location" required>
+                        <input name="location_country" id="location_country" placeholder="country">
+                        <input name="location_city" id="location_city" placeholder="city">
+                        <input name="location_street" id="location_street" placeholder="street">
+                        <input name="location_post_code" id="location_post_code" placeholder="post code">
                     </div>
                     <div>
                         <label for="phone_work">Phone Work:</label>
-                        <input name="phone_work" id="phone_work" placeholder="phone work" required>
+                        <input name="phone_work" id="phone_work" placeholder="phone work">
                     </div>
                     <div>
                         <label for="phone_cell">Phone Cell:</label>
-                        <input name="phone_cell" id="phone_cell" placeholder="phone cell" required>
+                        <input name="phone_cell" id="phone_cell" placeholder="phone cell">
                     </div>
                     <div>
                         <label for="phone_home">Phone Home:</label>
-                        <input name="phone_home" id="phone_home" placeholder="phone home" required>
+                        <input name="phone_home" id="phone_home" placeholder="phone home">
                     </div>
                     <div>
                         <label for="email">Email:</label>

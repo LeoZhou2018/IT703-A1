@@ -31,7 +31,7 @@ CREATE TABLE title (
 CREATE TABLE contact (
   Contact_ID INTEGER PRIMARY KEY AUTOINCREMENT,
   Title_ID INTEGER,
-  Contact_Name TEXT UNIQUE NOT NULL,
+  Contact_Name TEXT NOT NULL,
   Company_ID INTEGER,
   Role TEXT,
   Location_Country TEXT,

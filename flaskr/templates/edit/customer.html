@@ -17,10 +17,10 @@
     <div class="mainBox">
         <div class="leftBox">
             <div class="menuItem customers">
-                <a href="{{ url_for('edit.show_customer') }}">Customers</a>
+                <a href="{{ url_for('edit.edit_company') }}">Customers</a>
             </div>
             <div class="menuItem contacts">
-                <a href="{{ url_for('edit.show_contact') }}">Contacts</a>
+                <a href="{{ url_for('edit.edit_contact') }}">Contacts</a>
             </div>
         </div>
         <div class="rightBox">
@@ -33,7 +33,7 @@
                 </ul>
               {% endif %}
             {% endwith %}
-            <form action="{{ url_for('edit.search') }}" method="post">
+            <form action="{{ url_for('edit.search_company') }}" method="post">
                 <div>
                     <button class="gb_7e gb_hf" aria-label="Search Google Drive" role="button">
                         <svg focusable="false" height="24px" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
@@ -114,11 +114,11 @@
                             {% for contact in contacts %}
                                 <a class="action" href="{{ url_for('edit.show_contact', company=company, contact=contact) }}">
                                     <tr>
-                                        <td>{ contact['Title_ID'] }}</td>
-                                        <td>{ contact['Contact_Name'] }}</td>
-                                        <td>{ contact['Role'] }}</td>
-                                        <td>{ contact['Phone_Work'] }}</td>
-                                        <td>{ contact['Email'] }}</td>
+                                        <td>{{ contact['Title_ID'] }}</td>
+                                        <td>{{ contact['Contact_Name'] }}</td>
+                                        <td>{{ contact['Role'] }}</td>
+                                        <td>{{ contact['Phone_Work'] }}</td>
+                                        <td>{{ contact['Email'] }}</td>
                                     </tr>
                                 </a>
                             {% endfor %}
