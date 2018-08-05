@@ -63,8 +63,8 @@ def execute_update_company(result, company_id, company_name,
 
 
 def execute_add_company(result, company, company_name,
-                        location_country, location_city, location_street, location_post_code,
-                        postal_country, postal_city, postal_street, postal_post_code):
+                        location_country="", location_city="", location_street="", location_post_code="",
+                        postal_country="", postal_city="", postal_street="", postal_post_code=""):
     if not result:
         result = dict()
     if company is None:
@@ -302,7 +302,9 @@ def add_contact(title_id, contact_name, company_name, role,
     else:
         company = get_company_by_key_value("Company_Name", company_name)
         if company is None or company["State"] == 0:
-            company_id = execute_add_company(company, company_name)
+            result = dict()
+            result = execute_add_company(result, company, company_name)
+            company_id = result['company']['Company_ID']
         else:
             company_id = company['Company_ID']
     result = db.execute(
@@ -317,7 +319,7 @@ def add_contact(title_id, contact_name, company_name, role,
             ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             (title_id, contact_name, company_id, role,
              location_country, location_city, location_street, location_post_code,
-             phone_work, phone_cell, phone_home, email, notes))
+             email, phone_work, phone_cell, phone_home, notes))
         db.commit()
     else:
         contact = result[0]
@@ -330,10 +332,11 @@ def add_contact(title_id, contact_name, company_name, role,
                 'Location_Country = ?, Location_City = ?, Location_Street = ?, Location_Post_Code = ?,'
                 'Email = ?, Phone_Work = ?, Phone_Cell = ?, Phone_Home = ?, Notes = ?, State = ?'
                 'WHERE Contact_ID = ?',
-                (title_id, contact_name, company_name, role,
+                (title_id, contact_name, company_id, role,
                  location_country, location_city, location_street, location_post_code,
-                 phone_work, phone_cell, phone_home, email, notes, 1,
-                 company_id))
+                 email, phone_work, phone_cell, phone_home, notes, 1,
+                 contact['Contact_ID']))
+            db.commit()
     return "Add contact {0} completed.".format(contact_name)
 
 
@@ -348,12 +351,14 @@ def update_contact(title_id, contact_id, contact_name, company_name, role,
     contact = get_contact_by_key_value('Contact_ID', contact_id)
     if contact is None:
         return "The company you want to update doesn't exists."
-    if company_name is None:
-        company_id = None
+    if not company_name:
+        company_id = ""
     else:
         company = get_company_by_key_value("Company_Name", company_name)
         if company is None or company["State"] == 0:
-            company_id = execute_add_company(company, company_name)
+            result = dict()
+            result = execute_add_company(result, company, company_name)
+            company_id = result['company']['Company_ID']
         else:
             company_id = company['Company_ID']
     db = get_db()
@@ -361,12 +366,13 @@ def update_contact(title_id, contact_id, contact_name, company_name, role,
         'UPDATE contact SET '
         'Title_ID = ?, Contact_Name = ?, Company_ID = ?, Role = ?, '
         'Location_Country = ?, Location_City = ?, Location_Street = ?, Location_Post_Code = ?,'
-        'Email = ?, Phone_Work = ?, Phone_Cell = ?, Phone_Home = ?, Notes = ?, State = ?'
+        'Email = ?, Phone_Work = ?, Phone_Cell = ?, Phone_Home = ?, Notes = ?, State = ? '
         'WHERE Contact_ID = ?',
-        (title_id, contact_name, company_name, role,
+        (title_id, contact_name, company_id, role,
          location_country, location_city, location_street, location_post_code,
-         phone_work, phone_cell, phone_home, email, notes, 1,
-         company_id))
+         email, phone_work, phone_cell, phone_home, notes, 1,
+         contact_id))
+    db.commit()
     return "Update contact {0} completed.".format(contact_name)
 
 
