@@ -1,97 +1,117 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>IT703-A1</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='edit_style.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<nav>
-  <h1>IT703-A1</h1>
-  <ul>
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-  </ul>
-</nav>
-<body>
-    <div class="mainBox">
-        <div class="leftBox">
-            <div class="menuItem customers">
-                <a href="{{ url_for('edit.edit_company') }}">Customers</a>
-            </div>
-            <div class="menuItem contacts">
-                <a href="{{ url_for('edit.edit_contact') }}">Contacts</a>
-            </div>
-        </div>
-        <div class="rightBox">
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <ul class=flashes>
-                {% for message in messages %}
-                  <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-              {% endif %}
-            {% endwith %}
-            <form action="{{ url_for('edit.edit_contact') }}" method="post">
-                <div>
-                    <label for="title">Title:</label>
-                    <select name="title" id="title">
-                        {% for title in titles %}
-                            <option value="{{ title['Title_ID'] }}">{{ title['Title_Name'] }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {% if contact %}
-                    <div>
-                        <label for="contact_name">Name:</label>
-                        <input name="contact_name" id="contact_name" value="{{ contact['Contact_Name'] }}" required>
-                    </div>
-                {% else %}
-                    <div>
-                        <label for="contact_name">Name:</label>
-                        <input name="contact_name" id="contact_name" placeholder="name" required>
-                        <label for="company">Company:</label>
-                        <input name="company" id="company" placeholder="company name">
-                    </div>
-                    <div>
-                        <label for="role">Role:</label>
-                        <input name="role" id="role" placeholder="role" required>
-                        <label for="location">Location:</label>
-                        <input name="location_country" id="location_country" placeholder="country">
-                        <input name="location_city" id="location_city" placeholder="city">
-                        <input name="location_street" id="location_street" placeholder="street">
-                        <input name="location_post_code" id="location_post_code" placeholder="post code">
-                    </div>
-                    <div>
-                        <label for="phone_work">Phone Work:</label>
-                        <input name="phone_work" id="phone_work" placeholder="phone work">
-                    </div>
-                    <div>
-                        <label for="phone_cell">Phone Cell:</label>
-                        <input name="phone_cell" id="phone_cell" placeholder="phone cell">
-                    </div>
-                    <div>
-                        <label for="phone_home">Phone Home:</label>
-                        <input name="phone_home" id="phone_home" placeholder="phone home">
-                    </div>
-                    <div>
-                        <label for="email">Email:</label>
-                        <input name="email" id="email" placeholder="email" required>
-                    </div>
-                    <div>
-                        <label for="notes">Notes:</label>
-                        <input name="notes" id="notes" placeholder="notes" required>
-                    </div>
-                    <div>
-                        <input type="submit" name="action" value="New">
-                        <input type="submit" name="action" value="Save">
-                        <input type="submit" name="action" value="Update">
-                        <input type="submit" name="action" value="Remove">
-                    </div>
-                {% endif %}
-            </form>
-        </div>
+{% extends 'edit/edit_base.html' %}
+{% block rightBoxContent %}
+    <div>
+        <form action="{{ url_for('edit.edit_contact') }}" method="post">
+            <input type="submit" name="action" value="New">
+        </form>
     </div>
-</body>
-</html>
+    <form action="{{ url_for('edit.edit_contact') }}" method="post">
+        <div>
+            <label for="title">Title:</label>
+            <select name="title" id="title">
+                {% for title in titles %}
+                    {% if contact and contact['Title_ID'] == title['Title_ID'] %}
+                        <option value="{{ title['Title_ID'] }}" selected="selected" >{{ title['Title_Name'] }}</option>
+                    {% else %}
+                        <option value="{{ title['Title_ID'] }}">{{ title['Title_Name'] }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        {% if contact %}
+            <div>
+                <label for="contact_name">Name:</label>
+                {% if contact['Contact_ID'] %}
+                    <input type="hidden" name="contact_id" value="{{ contact['Contact_ID'] }}">
+                {% endif %}
+                <input name="contact_name" id="contact_name" value="{{ contact['Contact_Name'] }}" required>
+                <label for="company">Company:</label>
+                {% if company %}
+                    <input name="company" id="company" value="{{ company['Company_Name'] }}">
+                {% else %}
+                    <input name="company" id="company" placeholder="company name">
+                {% endif %}
+            </div>
+            <div>
+                <label for="role">Role:</label>
+                <input name="role" id="role" value="{{ contact['Role'] }}">
+                <label for="location">Location:</label>
+                <input name="location_country" id="location_country" value="{{ contact['Location_Country'] }}">
+                <input name="location_city" id="location_city" value="{{ contact['Location_City'] }}">
+                <input name="location_street" id="location_street" value="{{ contact['Location_Street'] }}">
+                <input name="location_post_code" id="location_post_code" value="{{ contact['Location_Post_Code'] }}">
+            </div>
+            <div>
+                <label for="phone_work">Phone Work:</label>
+                <input name="phone_work" id="phone_work" value="{{ contact['Phone_Work'] }}">
+            </div>
+            <div>
+                <label for="phone_cell">Phone Cell:</label>
+                <input name="phone_cell" id="phone_cell" value="{{ contact['Phone_Cell'] }}">
+            </div>
+            <div>
+                <label for="phone_home">Phone Home:</label>
+                <input name="phone_home" id="phone_home" value="{{ contact['Phone_Home'] }}">
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input name="email" id="email" value="{{ contact['Email'] }}">
+            </div>
+            <div>
+                <label for="notes">Notes:</label>
+                <input name="notes" id="notes" value="{{ contact['Notes'] }}">
+            </div>
+            <div>
+                {% if contact["Contact_ID"] %}
+                    <input type="submit" name="action" value="Update">
+                    <input type="submit" name="action" value="Remove">
+                {% else %}
+                    <input type="submit" name="action" value="Save">
+                {% endif %}
+            </div>
+        {% else %}
+            <div>
+                <label for="contact_name">Name:</label>
+                <input name="contact_name" id="contact_name" placeholder="name" required>
+                <label for="company">Company:</label>
+                {% if company %}
+                    <input name="company" id="company" value="{{ company['Company_Name'] }}">
+                {% else %}
+                    <input name="company" id="company" placeholder="company name">
+                {% endif %}
+            </div>
+            <div>
+                <label for="role">Role:</label>
+                <input name="role" id="role" placeholder="role">
+                <label for="location">Location:</label>
+                <input name="location_country" id="location_country" placeholder="country">
+                <input name="location_city" id="location_city" placeholder="city">
+                <input name="location_street" id="location_street" placeholder="street">
+                <input name="location_post_code" id="location_post_code" placeholder="post code">
+            </div>
+            <div>
+                <label for="phone_work">Phone Work:</label>
+                <input name="phone_work" id="phone_work" placeholder="phone work">
+            </div>
+            <div>
+                <label for="phone_cell">Phone Cell:</label>
+                <input name="phone_cell" id="phone_cell" placeholder="phone cell">
+            </div>
+            <div>
+                <label for="phone_home">Phone Home:</label>
+                <input name="phone_home" id="phone_home" placeholder="phone home">
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input name="email" id="email" placeholder="email">
+            </div>
+            <div>
+                <label for="notes">Notes:</label>
+                <input name="notes" id="notes" placeholder="notes">
+            </div>
+            <div>
+                <input type="submit" name="action" value="Save">
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}

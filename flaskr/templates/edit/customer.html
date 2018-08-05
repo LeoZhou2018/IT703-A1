@@ -1,136 +1,109 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>IT703-A1</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='edit_style.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<nav>
-  <h1>IT703-A1</h1>
-  <ul>
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-  </ul>
-</nav>
-<body>
-    <div class="mainBox">
-        <div class="leftBox">
-            <div class="menuItem customers">
-                <a href="{{ url_for('edit.edit_company') }}">Customers</a>
-            </div>
-            <div class="menuItem contacts">
-                <a href="{{ url_for('edit.edit_contact') }}">Contacts</a>
-            </div>
+{% extends 'edit/edit_base.html' %}
+{% block rightBoxContent %}
+    <form action="{{ url_for('edit.edit_company') }}" method="post">
+        <div>
+            <label for="search_name">Search</label>
+            <input name="search_name" id="search_name" required  placeholder="Search for company...">
+            <input type="submit" name="action" value="Search">
         </div>
-        <div class="rightBox">
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <ul class=flashes>
-                {% for message in messages %}
-                  <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-              {% endif %}
-            {% endwith %}
-            <form action="{{ url_for('edit.search_company') }}" method="post">
-                <div>
-                    <button class="gb_7e gb_hf" aria-label="Search Google Drive" role="button">
-                        <svg focusable="false" height="24px" viewBox="0 0 24 24" width="24px" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
-                            <path d="M0 0h24v24H0z" fill="none"></path>
-                        </svg>
-                    </button>
-                    <input name="search_name" id="search_name" required  placeholder="Search for company...">
-                </div>
-            </form>
-            <form  action="{{ url_for('edit.edit_company') }}" method="post">
-                {% if company %}
-                    <input type="hidden" name="company_id" value="{{ company['Company_ID'] }}">
-                    <div>
-                        <label for="company">Company Name</label>
-                        <input name="company" id="company" value="{{ company['Company_Name'] }}" required>
-                        <input type="submit" name="action" value="Save">
-                        <input type="submit" name="action" value="Update">
-                        <input type="submit" name="action" value="Remove">
-                    </div>
-                    <div class="location">
-                        <label>Location Address</label>
-                        <input name="location_country" value="{{ company['Location_Country'] }}" placeholder="country">
-                        <input name="location_city"  value="{{ company['Location_City'] }}" placeholder="city">
-                        <input name="location_street" value="{{ company['Location_Street'] }}" placeholder="street">
-                        <input name="location_post_code" value="{{ company['Location_Post_Code'] }}" placeholder="post code">
-                    </div>
-                    <div class="postal">
-                        <label>Postal Address</label>
-                        <input name="postal_country" value="{{ company['Postal_Country'] }}" placeholder="country">
-                        <input name="postal_city" value="{{ company['Postal_City'] }}" placeholder="city">
-                        <input name="postal_street" value="{{ company['Postal_Street'] }}" placeholder="street">
-                        <input name="postal_post_code" value="{{ company['Postal_Post_Code'] }}" placeholder="post code">
-                    </div>
+    </form>
+    <form  action="{{ url_for('edit.edit_company') }}" method="post">
+        {% if company %}
+            {% if company['Company_ID'] %}
+                <input type="hidden" name="company_id" value="{{ company['Company_ID'] }}">
+            {% endif %}
+            <div>
+                <label for="company">Company Name</label>
+                <input name="company" id="company" value="{{ company['Company_Name'] }}" required>
+                {% if company['Company_ID'] %}
+                    <input type="submit" name="action" value="Update">
+                    <input type="submit" name="action" value="Remove">
                 {% else %}
-                    <input type="hidden" name="company_id" value="">
-                    <div>
-                        <label for="company">Company Name</label>
-                        <input name="company" id="company" required>
-                        <input type="submit" name="action" value="Save">
-                        <input type="submit" name="action" value="Update">
-                        <input type="submit" name="action" value="Remove">
-                    </div>
-                    <div class="location">
-                        <label>Location Address</label>
-                        <input name="location_country" id="location_country" placeholder="country">
-                        <input name="location_city" id="location_city" placeholder="city">
-                        <input name="location_street" id="location_street" placeholder="street">
-                        <input name="location_post_code" id="location_post_code" placeholder="post code">
-                    </div>
-                    <div class="postal">
-                        <label>Postal Address</label>
-                        <input name="postal_country" id="postal_country" placeholder="country">
-                        <input name="postal_city" id="postal_city" placeholder="city">
-                        <input name="postal_street" id="postal_street" placeholder="street">
-                        <input name="postal_post_code" id="postal_post_code" placeholder="post code">
-                    </div>
+                    <input type="submit" name="action" value="Save">
                 {% endif %}
 
+            </div>
+            <div class="location">
+                <label>Location Address</label>
+                <input name="location_country" value="{{ company['Location_Country'] }}" placeholder="country">
+                <input name="location_city"  value="{{ company['Location_City'] }}" placeholder="city">
+                <input name="location_street" value="{{ company['Location_Street'] }}" placeholder="street">
+                <input name="location_post_code" value="{{ company['Location_Post_Code'] }}" placeholder="post code">
+            </div>
+            <div class="postal">
+                <label>Postal Address</label>
+                <input name="postal_country" value="{{ company['Postal_Country'] }}" placeholder="country">
+                <input name="postal_city" value="{{ company['Postal_City'] }}" placeholder="city">
+                <input name="postal_street" value="{{ company['Postal_Street'] }}" placeholder="street">
+                <input name="postal_post_code" value="{{ company['Postal_Post_Code'] }}" placeholder="post code">
+            </div>
+            {% if company['Company_ID'] %}
                 <div class="contact_info">
                     <label>Contacts:</label>
                     <input type="submit" name="action" value="Add Contact">
                 </div>
-            </form>
-            {% if contacts %}
-                <div class="contacts_list">
-                    <table class="fixed_header">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Name</th>
-                                <th>Role</th>
-                                <th>Phone_Work</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for contact in contacts %}
-                                <a class="action" href="{{ url_for('edit.show_contact', company=company, contact=contact) }}">
-                                    <tr>
-                                        <td>{{ contact['Title_ID'] }}</td>
-                                        <td>{{ contact['Contact_Name'] }}</td>
-                                        <td>{{ contact['Role'] }}</td>
-                                        <td>{{ contact['Phone_Work'] }}</td>
-                                        <td>{{ contact['Email'] }}</td>
-                                    </tr>
-                                </a>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <div>
-                    <label>The current company does not have any contact information</label>
-                </div>
             {% endif %}
-        </div>
-    </div>
-</body>
-</html>
+        {% else %}
+            <div>
+                <label for="company">Company Name</label>
+                <input name="company" id="company" required>
+                <input type="submit" name="action" value="Save">
+            </div>
+            <div class="location">
+                <label>Location Address</label>
+                <input name="location_country" id="location_country" placeholder="country">
+                <input name="location_city" id="location_city" placeholder="city">
+                <input name="location_street" id="location_street" placeholder="street">
+                <input name="location_post_code" id="location_post_code" placeholder="post code">
+            </div>
+            <div class="postal">
+                <label>Postal Address</label>
+                <input name="postal_country" id="postal_country" placeholder="country">
+                <input name="postal_city" id="postal_city" placeholder="city">
+                <input name="postal_street" id="postal_street" placeholder="street">
+                <input name="postal_post_code" id="postal_post_code" placeholder="post code">
+            </div>
+        {% endif %}
+    </form>
+    {% if company and company['Company_ID'] %}
+        {% if contacts %}
+            <div class="contacts_list">
+                <table class="fixed_header">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Phone_Work</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contact in contacts %}
+                            <tr>
+                                <td>{{ contact['Title_ID'] }}</td>
+                                <td>{{ contact['Contact_Name'] }}</td>
+                                <td>{{ contact['Role'] }}</td>
+                                <td>{{ contact['Phone_Work'] }}</td>
+                                <td>{{ contact['Email'] }}</td>
+                                <td>
+                                    <form  action="{{ url_for('edit.edit_contact') }}" method="post">
+                                        <div>
+                                            <input type="hidden" name="contact_id" value="{{ contact['Contact_ID'] }}">
+                                            <input type="submit" name="action" value="Edit">
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div>
+                <label>The current company does not have any contact information</label>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
