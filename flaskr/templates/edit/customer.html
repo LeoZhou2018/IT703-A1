@@ -103,7 +103,7 @@
                     <tbody>
                         {% for contact in contacts %}
                             <tr>
-                                <td>{{ contact['Title_ID'] }}</td>
+                                <td>{{ titles[contact['Title_ID'] - 1]['Title_Name'] }}</td>
                                 <td>{{ contact['Contact_Name'] }}</td>
                                 <td>{{ contact['Role'] }}</td>
                                 <td>{{ contact['Phone_Work'] }}</td>
